@@ -1,7 +1,7 @@
 import sys
 import api
 
-print("Boba Locator (´∀｀)♡")
+print("Boba Locator (´∀｀)♡ \n")
 
 location = input("Enter your location: ")
 

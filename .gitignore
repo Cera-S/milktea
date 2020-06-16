@@ -3,3 +3,6 @@ config.py
 
 # other
 __pycache__/
+
+# html file (generated automatically)
+boba.html
