@@ -1,25 +1,45 @@
 import requests
 import json
 import config
+import sys
+from json2html import *
 
-print("Boba Locator (´∀｀)♡")
+# making the api call
+def fetchData(userInput):
+    # create object
+    API_KEY = config.api_key
+    ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
+    HEADERS = {'Authorization': 'bearer %s' % API_KEY}
+    PARAMETERS = {'term': 'boba',
+                'limit': 25,
+                'location': '%s' %userInput} # 'key': 'value'
 
-# handle user input
-location = input("Enter your location: ")
+    # make request to yelp API
+    response = requests.get(url = ENDPOINT, params = PARAMETERS, headers = HEADERS)
 
-# create object
-API_KEY = config.api_key
-ENDPOINT = 'https://api.yelp.com/v3/businesses/search'
-HEADERS = {'Authorization': 'bearer %s' % API_KEY}
-PARAMETERS = {'term': 'boba',
-            'limit': 25,
-            'location': '%s' %location} # 'key': 'value'
+    data = response.json()
+ 
+    # converting to json string
+    dataString = json.dumps(data)
 
-# make request to yelp API
-response = requests.get(url = ENDPOINT, params = PARAMETERS, headers = HEADERS)
+    for business in data['businesses']:
+        print(business['name'])
+        print ("Rating:", business['rating'], "\n")
 
-data = response.json()
+    # prompt user
+    yn = input ("Would you like this printed to an HTML file? (Y/N) \n → ")
 
-for business in data['businesses']:
-    print(business['name'])
-    print ("Rating:", business['rating'], "\n")
+    if yn == "Y" or "y":
+        print ("loading file...")
+        htmlFile(userInput, dataString)
+    else:
+        exit(0)
+
+
+# creating the new output file
+def htmlFile(userInput, dataString):
+    htmlTable = json2html.convert(json = dataString)
+
+    with open('boba.html', 'w') as f:
+        f.write(htmlTable)
+        f.close()
