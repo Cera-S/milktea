@@ -1,2 +1,2 @@
 # milktea
-Yelp Fusion boba locator
+boba locator in terminal for given location. data can be exported to .html file
