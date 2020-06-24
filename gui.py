@@ -4,12 +4,16 @@ import config
 import json
 
 def formatData(data):
+    
     endstr = ''
 
-    for business in data['businesses']:
-        businessInfo = ' %s \n Rating: %d \n' %(business['name'], business['rating'])
-        endstr += businessInfo
-
+    try:
+        for business in data['businesses']:
+            businessInfo = ' %s \n Rating: %d \n \n' %(business['name'], business['rating'])
+            endstr += businessInfo
+    except:
+        return "Invalid location, please re-enter."
+        
     return endstr
 
 def fetchData(userInput):
@@ -32,27 +36,28 @@ def fetchData(userInput):
     label['text'] = formatData(data)
 
 
-
 root = tk.Tk()
 
+title = tk.Label(root, text="Boba Tracker", font='24')
+title.pack()
 
-canvas = tk.Canvas(root, height=667, width=375)
+canvas = tk.Canvas(root, height=720, width=1200, bg='#f7e3af')
 canvas.pack()
 
-frame = tk.Frame(root)
+frame = tk.Frame(root, bg='#f7e3af')
 frame.place(relx=0.5, rely=0.1, relwidth=0.75, relheight=0.1, anchor='n')
 
 entry = tk.Entry(frame, font='12')
-entry.place(relwidth=0.65, relheight=0.4)
+entry.place(relwidth=0.55, relheight=0.4)
 
 button = tk.Button(frame, text="Search", font=12, command=lambda: fetchData(entry.get()))
-button.place(relx=0.7, relheight=0.4, relwidth=0.3)
+button.place(relx=0.55, relheight=0.4, relwidth=0.2)
 
-lower_frame = tk.Frame(root, bg='#80c1ff', bd=10)
-lower_frame.place(relx=0.5, rely=0.25, relwidth=0.85, relheight=0.95, anchor='n')
+lower_frame = tk.Frame(root, bd=5)
+lower_frame.place(relx=0.5, rely=0.25, relwidth=0.75, relheight=0.65, anchor='n')
 
 
-label = tk.Label(lower_frame)
-label.place(relwidth=0.95, relheight=0.95)
+label = tk.Label(lower_frame, bg='#f3eec3')
+label.place(relwidth=1, relheight=1)
 
 root.mainloop()
