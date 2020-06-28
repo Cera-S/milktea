@@ -10,7 +10,7 @@ def formatData(data):
     endstr = ''
     try:
         for business in data['businesses']:
-            businessInfo = ' %s | Rating: %d ★ \n \n' %(business['name'], business['rating'])
+            businessInfo = ' %s | Rating: %d ★ | %s (%d miles away) \n \n ' %(business['name'], business['rating'], business['location']['address1'], convertToMiles(business['distance']))
             endstr += businessInfo
     
     except:
@@ -18,6 +18,8 @@ def formatData(data):
     
     return endstr
 
+def convertToMiles(distance):
+    return distance*0.000621371192
 
 def fetchData(userInput):
     # create object
@@ -59,7 +61,7 @@ def exportData():
 
 root = tk.Tk()
 
-title = tk.Label(root, text="Boba Tracker", font='24')
+title = tk.Label(root, text="Boba Tracker", font=36)
 title.grid(row=0, column=0, columnspan=3)
 
 canvas = tk.Canvas(root, height=720, width=1200, bg='#f7e3af')
@@ -72,18 +74,17 @@ entry = tk.Entry(frame, font='12')
 entry.place(relwidth=0.5, relheight=0.4)
 
 button = tk.Button(frame, text="Search", font=12, command=lambda: fetchData(entry.get()))
-button.place(relx=0.55, relheight=0.4, relwidth=0.2)
-
-lower_frame = tk.Frame(root, bd=5)
-lower_frame.place(relx=0.5, rely=0.25, relwidth=0.75, relheight=0.65, anchor='n')
+button.place(relx=0.53, relheight=0.4, relwidth=0.19)
 
 button = tk.Button(frame, text="Export Data", font=12, command = lambda: exportData())
-button.place(relx=0.55, rely=0.55, relheight=0.4, relwidth=0.2)
+button.place(relx=0.75, relheight=0.4, relwidth=0.19)
 
+lower_frame = tk.Frame(root, bd=5)
+lower_frame.place(relx=0.5, rely=0.20, relwidth=0.75, relheight=0.72, anchor='n')
 
-buttonPrev = tk.Button(root, text="<<", command=prev)
+buttonPrev = tk.Button(root, text="<< Back to overview", command=prev)
 buttonMid = tk.Button(root, text="Exit", command=root.quit)
-buttonForward = tk.Button(root, text=">>", command=lambda: forward(2))
+buttonForward = tk.Button(root, text="More details >>", command=lambda: forward())
 
 buttonPrev.grid(row=3, column=0)
 buttonMid.grid(row=3, column=1)
