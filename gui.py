@@ -1,13 +1,16 @@
 import tkinter as tk
+from tkinter import ttk
 import requests
 import config
 import json
+from json2html import *
+import os, sys, webbrowser
 
 def formatData(data):
     endstr = ''
     try:
         for business in data['businesses']:
-            businessInfo = ' %s \n Rating: %d \n \n' %(business['name'], business['rating'])
+            businessInfo = ' %s | Rating: %d ★ \n \n' %(business['name'], business['rating'])
             endstr += businessInfo
     
     except:
@@ -34,12 +37,25 @@ def fetchData(userInput):
     dataString = json.dumps(data)
     label['text'] = formatData(data)
 
+    htmlTable = json2html.convert(json = dataString, table_attributes="id=\"info-table\" class=\"table table-bordered table-hover\"")
+
+    with open('boba.html', 'w') as f:
+        f.write(htmlTable)
+        f.close()
+
+
 def forward():
     return
 
 
 def prev():
     return
+
+def exportData():
+        # open in default browser
+        f = 'file:///'+os.getcwd()+'/' + 'boba.html'
+        webbrowser.open_new_tab(f)
+
 
 root = tk.Tk()
 
@@ -61,7 +77,7 @@ button.place(relx=0.55, relheight=0.4, relwidth=0.2)
 lower_frame = tk.Frame(root, bd=5)
 lower_frame.place(relx=0.5, rely=0.25, relwidth=0.75, relheight=0.65, anchor='n')
 
-button = tk.Button(frame, text="Export Data", font=12)
+button = tk.Button(frame, text="Export Data", font=12, command = lambda: exportData())
 button.place(relx=0.55, rely=0.55, relheight=0.4, relwidth=0.2)
 
 
@@ -73,7 +89,7 @@ buttonPrev.grid(row=3, column=0)
 buttonMid.grid(row=3, column=1)
 buttonForward.grid(row=3, column=2)
 
-label = tk.Label(lower_frame, bg='#f3eec3')
-label.pack(relwidth=1, relheight=1)
+label = tk.Label(lower_frame, font=10, bg='#f3eec3')
+label.place(relwidth=1, relheight=1)
 
 root.mainloop()
